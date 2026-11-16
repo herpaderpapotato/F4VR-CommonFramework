@@ -153,8 +153,7 @@ namespace f4cf::f4vr
     {
         const auto frm = "Transform '" + name + "' Pos:({:.2f}, {:.2f}, {:.2f}), Rot:[[{:.2f}, {:.2f}, {:.2f}][{:.2f}, {:.2f}, {:.2f}][{:.2f}, {:.2f}, {:.2f}]], Scale:({:.2f})";
         if (sample) {
-            logger::sample(fmt::runtime(frm),
-                transform.translate.x,
+            logger::sample("{}", std::vformat(frm, std::make_format_args(transform.translate.x,
                 transform.translate.y,
                 transform.translate.z,
                 transform.rotate.entry[0][0],
@@ -166,10 +165,9 @@ namespace f4cf::f4vr
                 transform.rotate.entry[0][2],
                 transform.rotate.entry[1][2],
                 transform.rotate.entry[2][2],
-                transform.scale);
+                transform.scale))); /* FRIK-flat C1 */
         } else {
-            logger::info(fmt::runtime(frm),
-                transform.translate.x,
+            logger::info("{}", std::vformat(frm, std::make_format_args(transform.translate.x,
                 transform.translate.y,
                 transform.translate.z,
                 transform.rotate.entry[0][0],
@@ -181,7 +179,7 @@ namespace f4cf::f4vr
                 transform.rotate.entry[0][2],
                 transform.rotate.entry[1][2],
                 transform.rotate.entry[2][2],
-                transform.scale);
+                transform.scale))); /* FRIK-flat C1 */
         }
     }
 
@@ -189,9 +187,9 @@ namespace f4cf::f4vr
     {
         const auto frm = "Transform '" + name + "' Pos: ({:.2f}, {:.2f}, {:.2f})";
         if (sample) {
-            logger::sample(fmt::runtime(frm), pos.x, pos.y, pos.z);
+            logger::sample("{}", std::vformat(frm, std::make_format_args(pos.x, pos.y, pos.z))); /* FRIK-flat C1 */
         } else {
-            logger::info(fmt::runtime(frm), pos.x, pos.y, pos.z);
+            logger::info("{}", std::vformat(frm, std::make_format_args(pos.x, pos.y, pos.z))); /* FRIK-flat C1 */
         }
     }
 

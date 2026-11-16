@@ -792,7 +792,7 @@ namespace f4cf::render::sceneDepth
         }
         s_installFailed.store(true, std::memory_order_release);
 
-        if (!REL::Module::IsVR()) {
+        if (!f4cf::flat::isVR() /* FRIK-flat C2 */) {
             logger::warn("scene depth hook not installed: addresses are Fallout 4 VR only");
             return false;
         }

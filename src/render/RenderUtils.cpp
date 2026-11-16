@@ -8,13 +8,13 @@ namespace f4cf::render
 {
     ID3D11Device* getDevice()
     {
-        auto* renderer = RE::BSGraphics::RendererData::GetSingleton();
+        auto* renderer = RE::BSGraphics::GetRendererData() /* FRIK-flat C9 */;
         return renderer ? reinterpret_cast<ID3D11Device*>(renderer->device) : nullptr;
     }
 
     ID3D11DeviceContext* getContext()
     {
-        auto* renderer = RE::BSGraphics::RendererData::GetSingleton();
+        auto* renderer = RE::BSGraphics::GetRendererData() /* FRIK-flat C9 */;
         return renderer ? reinterpret_cast<ID3D11DeviceContext*>(renderer->context) : nullptr;
     }
 

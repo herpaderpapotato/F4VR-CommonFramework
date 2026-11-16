@@ -124,7 +124,20 @@ namespace F4SEVR
 
         virtual UInt64 GetParam(UInt32 idx, BSFixedString* outName, UInt64* outType)
         {
+#ifdef FRIK_FLAT // C13: flat inlines VDescTable::GetParam (1.10.163 270DE00) into NativeFunctionBase::GetParam 2101120; same body here
+            static_assert(sizeof(BSFixedString) == sizeof(RE::BSFixedString));
+            auto& out = *reinterpret_cast<RE::BSFixedString*>(outName);
+            if (idx < m_params.numParams) {
+                out = *reinterpret_cast<const RE::BSFixedString*>(&m_params.data[idx].name);
+                *outType = m_params.data[idx].type64;
+            } else {
+                out = RE::BSFixedString();
+                *outType = 0;
+            }
+            return 0;
+#else
             return CALL_MEMBER_FN(&m_params, GetParam)(idx, outName, outType);
+#endif
         }
 
         virtual UInt64 GetNumParams2()

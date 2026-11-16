@@ -61,5 +61,11 @@ namespace f4cf::f4vr
         BoneNodePosition* bonePositions;
     };
 
+#ifdef FRIK_FLAT // C7: flat NiNode is 0x140 (VR 0x180); boneCount +0x140, FlattenedBone* +0x148, entry 0xA0 (analysis/vr-hands-weapon.md 1.2)
+    static_assert(sizeof(BSFlattenedBoneTree) == 0x180);
+    static_assert(offsetof(BSFlattenedBoneTree, numTransforms) == 0x140 && offsetof(BSFlattenedBoneTree, transforms) == 0x148);
+    static_assert(sizeof(BSFlattenedBoneTree::BoneTransforms) == 0xA0);
+#else
     static_assert(sizeof(BSFlattenedBoneTree) == 0x1C0);
+#endif
 }

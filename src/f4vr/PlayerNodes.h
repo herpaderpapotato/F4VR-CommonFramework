@@ -2,6 +2,9 @@
 
 #include "BSFlattenedBoneTree.h"
 #include "F4VRUtils.h"
+#ifdef FRIK_FLAT // C19
+#include "vrshim/VrNodes.h"
+#endif
 
 namespace f4cf::f4vr
 {
@@ -16,8 +19,12 @@ namespace f4cf::f4vr
      */
     inline RE::VRPlayerNodes* getVRPlayerNodes()
     {
+#ifdef FRIK_FLAT // C6: no VR node table on the flat PlayerCharacter; vrshim owns one
+        return RE::PlayerCharacter::GetSingleton() && vrshim::vrNodesCreated() ? vrshim::getVRPlayerNodes() : nullptr; // null until posed once
+#else
         const auto player = RE::PlayerCharacter::GetSingleton();
         return player ? &player->vrNodes : nullptr;
+#endif
     }
 
     inline RE::NiNode* getWorldRootNode()
@@ -77,6 +84,9 @@ namespace f4cf::f4vr
 
     inline RE::NiNode* getWeaponNode()
     {
+#ifdef FRIK_FLAT // C19: flat has no Weapon node without a drawn weapon; vrshim picks the real one or a stand-in each frame
+        return vrshim::fpHands().weapon;
+#endif
         return findNode(getFirstPersonSkeleton(), "Weapon");
     }
 

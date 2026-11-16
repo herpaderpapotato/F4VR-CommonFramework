@@ -25,7 +25,11 @@ namespace f4cf::f4vr
          */
         RE::BSShaderProperty* getEffectShaderProperty(RE::BSGeometry* geometry)
         {
+#ifdef FRIK_FLAT // C11: flat BSGeometry has the properties directly (no GetRuntimeData)
+            const auto property = geometry->properties[1].get();
+#else
             const auto property = geometry->GetRuntimeData().properties[1].get();
+#endif
             const auto rtti = property ? property->GetRTTI() : nullptr;
             if (!rtti || std::string_view(rtti->GetName()) != "BSEffectShaderProperty") {
                 return nullptr;
@@ -39,7 +43,7 @@ namespace f4cf::f4vr
          */
         bool isPrivateMaterial(const RE::BSShaderMaterial* material)
         {
-            return material->hashKey == RE::BSShaderMaterial::UNIQUE_HASH_KEY && material->QRefCount() == 1;
+            return material->hashKey == RE::BSEffectShaderMaterial::UNIQUE_HASH_KEY /* FRIK-flat C11 */ && material->QRefCount() == 1;
         }
     }
 

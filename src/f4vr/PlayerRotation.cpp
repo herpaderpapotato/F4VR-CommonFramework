@@ -27,25 +27,25 @@ namespace f4cf::f4vr
          */
         int iniRotationType()
         {
-            static auto setting = reinterpret_cast<int*>(REL::Offset(0x37d5e78).address()); // NOLINT(performance-no-int-to-ptr)
+            static auto setting = reinterpret_cast<int*>(vrshim::FlatOffset(0x37d5e78).address()); // NOLINT(performance-no-int-to-ptr)
             return *setting;
         }
 
         float iniRotationAngle()
         {
-            static auto setting = reinterpret_cast<float*>(REL::Offset(0x37d5e90).address()); // NOLINT(performance-no-int-to-ptr)
+            static auto setting = reinterpret_cast<float*>(vrshim::FlatOffset(0x37d5e90).address()); // NOLINT(performance-no-int-to-ptr)
             return *setting;
         }
 
         float iniRotationSpeed()
         {
-            static auto setting = reinterpret_cast<float*>(REL::Offset(0x37d5ea8).address()); // NOLINT(performance-no-int-to-ptr)
+            static auto setting = reinterpret_cast<float*>(vrshim::FlatOffset(0x37d5ea8).address()); // NOLINT(performance-no-int-to-ptr)
             return *setting;
         }
 
         float iniAngleSnapSmoothingSpeed()
         {
-            static auto setting = reinterpret_cast<float*>(REL::Offset(0x37cfd98).address()); // NOLINT(performance-no-int-to-ptr)
+            static auto setting = reinterpret_cast<float*>(vrshim::FlatOffset(0x37cfd98).address()); // NOLINT(performance-no-int-to-ptr)
             return *setting;
         }
     }

@@ -7,10 +7,10 @@ namespace f4cf::f4vr
     constexpr std::uint32_t MiningHelmet = 0x0022DD1F;
     constexpr std::uint32_t PALightKW = 0x000B34A6;
 
-    inline REL::Relocation NEW_REFR_DATA_VTABLE(REL::Offset(0x2c8d080));
+    inline REL::Relocation NEW_REFR_DATA_VTABLE(vrshim::FlatOffset(0x2c8d080));
 
     using _BGSObjectInstance_CTOR = void* (*)(void* instance, RE::TESForm* a_form, RE::TBO_InstanceData* a_instanceData);
-    inline REL::Relocation<_BGSObjectInstance_CTOR> BGSObjectInstance_CTOR(REL::Offset(0x2dd930));
+    inline REL::Relocation<_BGSObjectInstance_CTOR> BGSObjectInstance_CTOR(vrshim::FlatOffset(0x2dd930));
 
     class BGSObjectInstance
     {

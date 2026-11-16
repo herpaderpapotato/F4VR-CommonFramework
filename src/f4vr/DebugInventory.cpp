@@ -395,11 +395,11 @@ namespace
         using IC = DebugInventory::ItemClass;
         switch (cls) {
         case IC::ArmorLight:
-            return RE::BIPED_MODEL::kWeightLight;
+            return vrshim::kWeightLight /* FRIK-flat C11 */;
         case IC::ArmorHeavy:
-            return RE::BIPED_MODEL::kWeightHeavy;
+            return vrshim::kWeightHeavy /* FRIK-flat C11 */;
         default:
-            return RE::BIPED_MODEL::kWeightNone;
+            return vrshim::kWeightNone /* FRIK-flat C11 */;
         }
     }
 
@@ -463,9 +463,9 @@ namespace
     std::string weightClassName(const std::uint32_t weightClass)
     {
         switch (weightClass) {
-        case RE::BIPED_MODEL::kWeightLight:
+        case vrshim::kWeightLight /* FRIK-flat C11 */:
             return "light";
-        case RE::BIPED_MODEL::kWeightHeavy:
+        case vrshim::kWeightHeavy /* FRIK-flat C11 */:
             return "heavy";
         default:
             return "none";
@@ -475,7 +475,7 @@ namespace
     /** Print detail for armor: the CK slots it occupies and its weight class, e.g. " slots:41 class:heavy". */
     std::string describeArmor(const RE::TESObjectARMO* armo)
     {
-        const std::uint32_t mask = armo->GetSlotMask();
+        const std::uint32_t mask = vrshim::armorSlotMask(armo) /* FRIK-flat C11 */;
         std::string slots;
         for (int bit = 0; bit < 32; ++bit) {
             if (mask & (1u << bit)) {
@@ -484,7 +484,7 @@ namespace
             }
         }
         std::string out = slots.empty() ? "" : " slots:" + slots;
-        out += " class:" + weightClassName(armo->bipedModelData.weightClass);
+        out += " class:" + weightClassName(vrshim::armorWeightClass(armo) /* FRIK-flat C11 */);
         return out;
     }
 
@@ -615,10 +615,10 @@ namespace f4cf::f4vr
                 printOnly,
                 filter.predicate,
                 [slotMask, armorWeight](const RE::TESObjectARMO* a) {
-                    if (slotMask && (a->GetSlotMask() & *slotMask) == 0) {
+                    if (slotMask && (vrshim::armorSlotMask(a) /* FRIK-flat C11 */ & *slotMask) == 0) {
                         return false;
                     }
-                    if (armorWeight && a->bipedModelData.weightClass != *armorWeight) {
+                    if (armorWeight && vrshim::armorWeightClass(a) /* FRIK-flat C11 */ != *armorWeight) {
                         return false;
                     }
                     return true;

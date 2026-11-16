@@ -75,6 +75,9 @@ namespace f4cf
 
         bool onF4SEPluginQuery(const F4SE::QueryInterface* skse, F4SE::PluginInfo* info) const;
         bool onF4SEPluginLoad(const F4SE::LoadInterface* f4se);
+#ifdef FRIK_FLAT // C17: logger, F4SE init and the config only (FRIK smooth movement without the body)
+        bool onF4SEPluginLoadSmoothOnly(const F4SE::LoadInterface* f4se);
+#endif
 
         void onFrameUpdateSafe();
 

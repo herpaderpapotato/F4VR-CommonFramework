@@ -67,7 +67,11 @@ namespace f4cf::logger::internal
     template <class... Args>
     void sampleImpl(const int time, const std::source_location& loc, spdlog::format_string_t<Args...> fmt, Args&&... args)
     {
+#ifdef FRIK_FLAT // C1: std::format_string
+        const std::string_view fmtView = fmt.get();
+#else
         const fmt::basic_string_view<char> fmtView = fmt;
+#endif
         const std::string_view key(fmtView.data(), fmtView.size());
 
         const auto now = std::chrono::steady_clock::now();
@@ -275,7 +279,7 @@ namespace f4cf::logger
     inline void init(const std::string_view& logFileName)
     {
         auto path = F4SE::log::log_directory();
-        const auto gamepath = REL::Module::IsVR() ? "Fallout4VR/F4SE" : "Fallout4/F4SE";
+        const auto gamepath = f4cf::flat::isVR() /* FRIK-flat C2 */ ? "Fallout4VR/F4SE" : "Fallout4/F4SE";
         if (!path.value().generic_string().ends_with(gamepath)) {
             // handle bug where game directory is missing
             path = path.value().parent_path().append(gamepath);

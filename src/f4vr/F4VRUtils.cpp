@@ -1,3 +1,4 @@
+#include "vrshim/Bridge.h" // FRIK-flat C13
 #include "F4VRUtils.h"
 
 #include <cmath>
@@ -155,7 +156,17 @@ namespace f4cf::f4vr
      */
     bool isWeaponDrawn()
     {
+#ifdef FRIK_FLAT // C24: measured 15 Nov: GetWeaponMagicDrawn() false with the 10mm drawn; read ActorState (+0x128) +0xC bits 1..3
+                 // raw (WEAPON_STATE, 3 = drawn), as fo4flatvr's floating gun does
+        const auto player = getPlayer();
+        if (!player) {
+            return false;
+        }
+        const auto bits = *reinterpret_cast<const std::uint32_t*>(reinterpret_cast<const std::uint8_t*>(player) + 0x134);
+        return ((bits >> 1) & 7) == 3;
+#else
         return getPlayer()->GetWeaponMagicDrawn();
+#endif
     }
 
     /**
@@ -178,7 +189,12 @@ namespace f4cf::f4vr
      */
     bool isUnarmedWeaponDrawn()
     {
+#ifdef FRIK_FLAT // C29: flat lists the Unarmed WEAP (0x1F4) as the equipped weapon when no weapon is equipped
+        const auto w = getEquippedWeapon();
+        return isWeaponDrawn() && (w == nullptr || w->GetFormID() == 0x1F4);
+#else
         return isWeaponDrawn() && getEquippedWeapon() == nullptr;
+#endif
     }
 
     /**
@@ -188,7 +204,20 @@ namespace f4cf::f4vr
     {
         auto* pc = getPlayer();
         auto* vm = RE::BSScript::Internal::VirtualMachine::GetSingleton();
+#ifdef FRIK_FLAT // C13: VR's Papyrus native (VR 140D790) has no flat match; read the equipped weapon from the process data
+        auto* mh = pc && pc->currentProcess ? pc->currentProcess->middleHigh : nullptr;
+        if (!mh) {
+            return nullptr;
+        }
+        for (auto& it : mh->equippedItems) {
+            if (it.item.object && it.item.object->IsWeapon()) {
+                return static_cast<RE::TESObjectWEAP*>(it.item.object);
+            }
+        }
+        return nullptr;
+#else
         return pc && vm ? GetEquippedWeapon(vm, 0, pc, 0) : nullptr;
+#endif
     }
 
     /**
@@ -307,7 +336,11 @@ namespace f4cf::f4vr
         pickData.SetStartEnd(currentPos, targetPos);
 
         // Configure collision filter to use the player's collision layer
+#ifdef FRIK_FLAT // C11: flat bhkPickData exposes the hknp query; the filter info lives in its filter data
+        pickData.castQuery.m_filterData.m_collisionFilterInfo = player->GetCollisionFilter().filter;
+#else
         pickData.collisionFilter = player->GetCollisionFilter();
+#endif
 
         // Use projectile LOS calculation for collision detection
         // This is a reliable method used by the game for checking clear paths
@@ -343,7 +376,11 @@ namespace f4cf::f4vr
      */
     RE::ProcessLists* getProcessLists()
     {
+#ifdef FRIK_FLAT // C13: the flat lib's singleton resolves through the flat address library
+        return RE::ProcessLists::GetSingleton();
+#else
         return *g_processLists;
+#endif
     }
 
     /**
@@ -433,7 +470,7 @@ namespace f4cf::f4vr
         if (!observer || !target || !observer->currentProcess || !observer->currentProcess->high) {
             return -1;
         }
-        return observer->RequestDetectionLevel(target);
+        return vrshim::actorRequestDetectionLevel(observer, target); // FRIK-flat C11
     }
 
     /**
@@ -470,6 +507,12 @@ namespace f4cf::f4vr
         if (!actor || !actor->currentProcess || !actor->currentProcess->high) {
             return;
         }
+#ifdef FRIK_FLAT // C13: AIProcess::SetActorLightLevel (VR E9A3C0) not mapped yet - flashlight stealth light level is skipped
+        if (!vrshim::inGameImage(AIProcess_SetLightLevel.address())) {
+            logger::sample(60000, "FRIK-flat: setLightLevel skipped (AIProcess::SetActorLightLevel not mapped)");
+            return;
+        }
+#endif
         AIProcess_SetLightLevel(actor->currentProcess, value);
     }
 
@@ -542,8 +585,12 @@ namespace f4cf::f4vr
     bool isLeftHandedMode()
     {
         // not sure why RE::Relocation doesn't work here, so using raw address
-        static auto iniLeftHandedMode = reinterpret_cast<bool*>(REL::Offset(0x37d5e48).address()); // NOLINT(performance-no-int-to-ptr)
+#ifdef FRIK_FLAT // C13: VR's bLeftHandedMode:VR -> fo4flatvr's [Input] left-handed setting, through the bridge
+        return vrshim::bridge::leftHanded();
+#else
+        static auto iniLeftHandedMode = reinterpret_cast<bool*>(vrshim::FlatOffset(0x37d5e48).address()); // NOLINT(performance-no-int-to-ptr)
         return *iniLeftHandedMode;
+#endif
     }
 
     /**
@@ -553,8 +600,8 @@ namespace f4cf::f4vr
     static std::pair<RE::Setting*, RE::Setting*> getPipboyPlacementSettings()
     {
         // not sure why RE::Relocation doesn't work here, so using raw address
-        static auto projected = reinterpret_cast<RE::Setting*>(REL::Offset(0x37B4278).address()); // NOLINT(performance-no-int-to-ptr)
-        static auto inFront = reinterpret_cast<RE::Setting*>(REL::Offset(0x37B4290).address()); // NOLINT(performance-no-int-to-ptr)
+        static auto projected = reinterpret_cast<RE::Setting*>(vrshim::FlatOffset(0x37B4278).address()); // NOLINT(performance-no-int-to-ptr)
+        static auto inFront = reinterpret_cast<RE::Setting*>(vrshim::FlatOffset(0x37B4290).address()); // NOLINT(performance-no-int-to-ptr)
         return { projected, inFront };
     }
 
@@ -571,6 +618,9 @@ namespace f4cf::f4vr
      */
     PipboyPlacement getPipboyPlacement()
     {
+#ifdef FRIK_FLAT // C13: flat has no VR Pip-Boy placement settings; the wrist is the only FRIK placement there
+        return PipboyPlacement::Wrist;
+#endif
         const auto [projected, inFront] = getPipboyPlacementSettings();
         if (inFront->GetBinary()) {
             return PipboyPlacement::InFront;
@@ -584,6 +634,10 @@ namespace f4cf::f4vr
      */
     void setPipboyPlacement(const PipboyPlacement placement)
     {
+#ifdef FRIK_FLAT // C13: see getPipboyPlacement
+        logger::info("FRIK-flat: Pip-Boy placement {} ignored (flat: wrist only)", static_cast<int>(placement));
+        return;
+#endif
         const auto [projected, inFront] = getPipboyPlacementSettings();
         logger::info("Set Pip-Boy placement to {}", static_cast<int>(placement));
         projected->SetBinary(placement == PipboyPlacement::Projected);
@@ -604,8 +658,12 @@ namespace f4cf::f4vr
     bool isComfortSneakMode()
     {
         // not sure why RE::Relocation doesn't work here, so using raw address
-        static auto iniComfortSneakMode = reinterpret_cast<bool*>(REL::Offset(0x37D6178).address()); // NOLINT(performance-no-int-to-ptr)
+#ifdef FRIK_FLAT // C13: VR-only bComfortSneak:VR
+        return false;
+#else
+        static auto iniComfortSneakMode = reinterpret_cast<bool*>(vrshim::FlatOffset(0x37D6178).address()); // NOLINT(performance-no-int-to-ptr)
         return *iniComfortSneakMode;
+#endif
     }
 
     /**
@@ -613,8 +671,12 @@ namespace f4cf::f4vr
      */
     bool useWandDirectionalMovement()
     {
-        static auto iniUseWandDirectionalMovement = reinterpret_cast<bool*>(REL::Offset(0x37D6160).address()); // NOLINT(performance-no-int-to-ptr)
+#ifdef FRIK_FLAT // C13: VR-only bUseWandDirectionalMovement; fo4flatvr moves by the stick in head direction
+        return false;
+#else
+        static auto iniUseWandDirectionalMovement = reinterpret_cast<bool*>(vrshim::FlatOffset(0x37D6160).address()); // NOLINT(performance-no-int-to-ptr)
         return *iniUseWandDirectionalMovement;
+#endif
     }
 
     /**
@@ -633,6 +695,35 @@ namespace f4cf::f4vr
             return setting;
         }
 
+#ifdef FRIK_FLAT // C15: VR-only settings (":VR", ":VRPipboy", ...) do not exist on flat; callers dereference the result.
+        // Hand out a per-name setting that is never registered with the game (value 0 / false / ""), for both paths.
+        {
+            struct Fallback
+            {
+                std::string  key;  // owns the name the setting points at (never starts with 'S', which ~Setting would free)
+                RE::Setting  setting;
+                static RE::Setting make(const char* a_key)
+                {
+                    switch (a_key[0]) {
+                    case 'b': return RE::Setting(a_key, false);
+                    case 'i': return RE::Setting(a_key, std::int32_t{ 0 });
+                    case 'u': return RE::Setting(a_key, std::uint32_t{ 0 });
+                    default: return RE::Setting(a_key, 0.0f);
+                    }
+                }
+                explicit Fallback(const char* a_name) : key(a_name), setting(make(key.c_str())) {}
+            };
+            static std::mutex lock;
+            static std::unordered_map<std::string, std::unique_ptr<Fallback>> fallbacks;
+            std::scoped_lock l(lock);
+            auto& slot = fallbacks[name];
+            if (!slot) {
+                logger::warn("FRIK-flat: setting '{}' not on flat; using an unregistered fallback (0)", name);
+                slot = std::make_unique<Fallback>(name);
+            }
+            return &slot->setting;
+        }
+#endif
         if (!addNew) {
             logger::warn("Setting '{}' not found in INI settings", name);
             return nullptr;
@@ -1011,8 +1102,13 @@ namespace f4cf::f4vr
         }
 
         NiCloneProcess proc;
+#ifdef FRIK_FLAT // C13: the two hash maps' end-of-chain sentinels (VR 36FF560/564); only their identity matters
+        proc.unk18 = const_cast<uint64_t*>(reinterpret_cast<const uint64_t*>(RE::detail::BSTScatterTableSentinel));
+        proc.unk48 = const_cast<uint64_t*>(reinterpret_cast<const uint64_t*>(RE::detail::BSTScatterTableSentinel));
+#else
         proc.unk18 = reinterpret_cast<uint64_t*>(cloneAddr1.address());
         proc.unk48 = reinterpret_cast<uint64_t*>(cloneAddr2.address());
+#endif
         const auto uiNode = cloneNode(nifNode, &proc);
         copyNodeNamesRecursive(nifNode, uiNode);
         return uiNode;

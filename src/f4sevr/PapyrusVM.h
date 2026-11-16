@@ -334,7 +334,7 @@ namespace F4SEVR
 
     inline GameVM* getGameVM()
     {
-        static REL::Relocation<GameVM**> g_gameVM(REL::Offset(0x05935428));
+        static REL::Relocation<GameVM**> g_gameVM(vrshim::FlatOffset(0x05935428));
         return *g_gameVM.get();
     }
 }

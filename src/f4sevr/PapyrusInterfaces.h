@@ -183,7 +183,7 @@ namespace F4SEVR
 
     inline IObjectHandlePolicy* getObjectHandlePolicy()
     {
-        static REL::Relocation<IObjectHandlePolicy**> g_objectHandlePolicy(REL::Offset(0x06874E30));
+        static REL::Relocation<IObjectHandlePolicy**> g_objectHandlePolicy(vrshim::FlatOffset(0x06874E30));
         return *g_objectHandlePolicy.get();
     }
 
@@ -223,7 +223,7 @@ namespace F4SEVR
     };
 
     typedef VMRefHandle* (*_GetRefFromHandle)(VMRefHandle* ref, UInt64 handle);
-    inline REL::Relocation<_GetRefFromHandle> GetRefFromHandle = REL::Relocation<_GetRefFromHandle>(REL::Offset(0x0134B3A0));
+    inline REL::Relocation<_GetRefFromHandle> GetRefFromHandle = REL::Relocation<_GetRefFromHandle>(vrshim::FlatOffset(0x0134B3A0));
 
     class VMObjectTypeInfo;
 
@@ -245,5 +245,5 @@ namespace F4SEVR
     static_assert(sizeof(VMPropertyInfo) == 0x40);
 
     typedef VMPropertyInfo* (*_GetVMPropertyInfo)(VMObjectTypeInfo* objectTypeInfo, VMPropertyInfo* outInfo, BSFixedString* propertyName, bool unk4); // unk4 = 1
-    inline REL::Relocation<_GetVMPropertyInfo> GetVMPropertyInfo = REL::Relocation<_GetVMPropertyInfo>(REL::Offset(0x026C2060));
+    inline REL::Relocation<_GetVMPropertyInfo> GetVMPropertyInfo = REL::Relocation<_GetVMPropertyInfo>(vrshim::FlatOffset(0x026C2060));
 }

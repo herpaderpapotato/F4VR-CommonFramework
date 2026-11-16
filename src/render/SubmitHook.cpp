@@ -900,7 +900,7 @@ namespace f4cf::render
             return true;
         }
 
-        if (!REL::Module::IsVR()) {
+        if (!f4cf::flat::isVR() /* FRIK-flat C2 */) {
             if (!s_loggedNotVR) {
                 s_loggedNotVR = true;
                 logger::warn("Only supported on Fallout 4 VR; overlays disabled");
@@ -936,7 +936,7 @@ namespace f4cf::render
             // found or created here, on the game thread, rather than by the hook's first Submit
             const auto& sharedDepth = sceneDepth::internal::sharedSceneDepth();
             if (sharedDepth.participants > 0) {
-                logger::info("The scene depth copy is shared with the framework mods of this process, {} of them so far", sharedDepth.participants);
+                logger::info("The scene depth copy is shared with the framework mods of this process, {} of them so far", static_cast<long>(sharedDepth.participants)); // FRIK-flat C1: std::format has no volatile formatter
             } else {
                 logger::warn("The scene depth copy is this mod's own: the one the framework mods share could not be found or created");
             }

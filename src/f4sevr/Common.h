@@ -15,7 +15,7 @@ namespace F4SEVR
     inline _##functionName##_type* _##functionName##_GetPtr(void)              \
     {                                                                          \
         static uintptr_t _address;                                             \
-        _address = address + REL::Module::get().base();                        \
+        _address = vrshim::flatAddress(address, false, #functionName); /* FRIK-flat C4 */                        \
         return (_##functionName##_type*)&_address;                             \
     }
 
@@ -53,7 +53,7 @@ namespace F4SEVR
         struct empty_struct                                                \
         {};                                                                \
         typedef retnType (empty_struct::* _##fnName##_type)();             \
-        const static uintptr_t address = addr + REL::Module::get().base(); \
+        const static uintptr_t address = vrshim::flatAddress(addr, false, #fnName); /* FRIK-flat C4 */ \
         _##fnName##_type fn = *(_##fnName##_type*)&address;                \
         return (reinterpret_cast<empty_struct*>(this)->*fn)();             \
     }
@@ -80,7 +80,7 @@ namespace F4SEVR
     // B53CEF7AA7FC153E48CDE9DBD36CD8242577E27F+11D
     inline Heap* getMainHeap()
     {
-        static REL::Relocation<Heap*> g_mainHeap(REL::Offset(0x0392E400));
+        static REL::Relocation<Heap*> g_mainHeap(vrshim::FlatOffset(0x0392E400));
         return g_mainHeap.get();
     }
 
@@ -95,10 +95,10 @@ namespace F4SEVR
     }
 
     typedef void (*_CalculateCRC32_64)(UInt32* out, UInt64 data, UInt32 previous);
-    inline REL::Relocation<_CalculateCRC32_64> CalculateCRC32_64 = REL::Relocation<_CalculateCRC32_64>(REL::Offset(0x01B931B0));
+    inline REL::Relocation<_CalculateCRC32_64> CalculateCRC32_64 = REL::Relocation<_CalculateCRC32_64>(vrshim::FlatOffset(0x01B931B0));
 
     typedef void (*_CalculateCRC32_32)(UInt32* out, UInt32 data, UInt32 previous);
-    inline REL::Relocation<_CalculateCRC32_32> CalculateCRC32_32 = REL::Relocation<_CalculateCRC32_32>(REL::Offset(0x01B93120));
+    inline REL::Relocation<_CalculateCRC32_32> CalculateCRC32_32 = REL::Relocation<_CalculateCRC32_32>(vrshim::FlatOffset(0x01B93120));
 
     // 8
     template <class T>

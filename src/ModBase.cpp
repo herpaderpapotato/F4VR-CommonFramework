@@ -131,7 +131,7 @@ namespace f4cf
             if (skse->IsEditor()) {
                 logger::critical("Loaded in editor, marking as incompatible");
                 // ReSharper disable once CppUnreachableCode
-            } else if (skse->RuntimeVersion() < (REL::Module::IsF4() ? F4SE::RUNTIME_LATEST : F4SE::RUNTIME_LATEST_VR)) {
+            } else if (skse->RuntimeVersion() < F4SE::RUNTIME_LATEST /* FRIK-flat C2 */) {
                 logger::critical("Unsupported runtime version {}", skse->RuntimeVersion().string());
             } else {
                 logger::info("F4SE Plugin Query v{} compatible: {} v{}", skse->F4SEVersion().string(), info->name, info->version);
@@ -155,6 +155,10 @@ namespace f4cf
         bool success = false;
         CPPTRACE_TRY
         {
+#ifdef FRIK_FLAT // C12: flat F4SE 0.7.x calls F4SEPlugin_Version + Load only, never Query, where the logger is set up
+            logger::init(_settings.logFileName);
+            logPluginGameStart();
+#endif
             logger::info("Init CommonLibF4 F4SE...");
             F4SE::Init(f4se, false);
 
@@ -193,6 +197,29 @@ namespace f4cf
         }
         return success;
     }
+
+#ifdef FRIK_FLAT // C17
+    bool ModBase::onF4SEPluginLoadSmoothOnly(const F4SE::LoadInterface* f4se)
+    {
+        bool success = false;
+        CPPTRACE_TRY
+        {
+            logger::init(_settings.logFileName);
+            logPluginGameStart();
+            logger::info("FRIK-flat: smooth-movement-only mode (fo4flatvr.ini [FRIK] bBody=0): no hooks, patches, skeleton or frame");
+            F4SE::Init(f4se, false);
+            logger::info("Init config...");
+            _settings.config->load();
+            success = true;
+        }
+        CPPTRACE_CATCH(const std::exception& ex)
+        {
+            const auto stacktrace = cpptrace::from_current_exception().to_string();
+            logger::error("Unhandled exception: {}\n{}", ex.what(), stacktrace);
+        }
+        return success;
+    }
+#endif
 
     namespace
     {
@@ -306,14 +333,18 @@ namespace f4cf
         CPPTRACE_CATCH(const std::exception& ex)
         {
             const auto stacktrace = cpptrace::from_current_exception().to_string();
+#ifdef FRIK_FLAT // C15: an exception in the mod's frame must not unwind into game code (that kills the game); skip the frame
+            logger::sample(5000, "Error in onFrameUpdate (frame skipped): {}\n{}", ex.what(), stacktrace);
+#else
             logger::critical("Error in onFrameUpdate: {}\n{}", ex.what(), stacktrace);
             throw;
+#endif
         }
     }
 
     void ModBase::logPluginGameStart() const
     {
-        const auto game = REL::Module::IsVR() ? "Fallout4VR" : "Fallout4";
+        const auto game = f4cf::flat::isVR() /* FRIK-flat C2 */ ? "Fallout4VR" : "Fallout4";
         const auto runtimeVer = REL::Module::get().version();
         logger::info("Starting '{}' v{} ; {} v{} ; {} ; BaseAddress: 0x{:X}",
             _settings.name,

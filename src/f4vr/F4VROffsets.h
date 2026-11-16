@@ -21,54 +21,54 @@ namespace f4cf::f4vr
         T p;
     };
 
-    inline REL::Relocation testin(REL::Offset(0x5a3b888));
+    inline REL::Relocation testin(vrshim::FlatOffset(0x5a3b888));
 
     using _IsInAir = bool (*)(RE::Actor* actor);
-    inline REL::Relocation<_IsInAir> IsInAir(REL::Offset(0x00DC3230));
+    inline REL::Relocation<_IsInAir> IsInAir(vrshim::FlatOffset(0x00DC3230));
 
     using _GetSitState = int (*)(RE::BSScript::Internal::VirtualMachine* registry, std::uint64_t stackID, RE::Actor* actor);
-    inline REL::Relocation<_GetSitState> GetSitState(REL::Offset(0x40e410));
+    inline REL::Relocation<_GetSitState> GetSitState(vrshim::FlatOffset(0x40e410));
 
     using _IsSneaking = bool (*)(RE::Actor* a_actor);
-    inline REL::Relocation<_IsSneaking> IsSneaking(REL::Offset(0x24d20));
+    inline REL::Relocation<_IsSneaking> IsSneaking(vrshim::FlatOffset(0x24d20));
 
     typedef RE::TESObjectWEAP* (*_GetEquippedWeapon)(RE::BSScript::Internal::VirtualMachine* registry, std::uint64_t stackID, RE::Actor* actor, std::uint64_t aiEquipIndex);
-    inline REL::Relocation<_GetEquippedWeapon> GetEquippedWeapon(REL::Offset(0x140d790));
+    inline REL::Relocation<_GetEquippedWeapon> GetEquippedWeapon(vrshim::FlatOffset(0x140d790));
 
     /**
      * The papyrus Actor.SetRestrained method that prevents the player from moving, rotating, and shooting.
      */
     using _SetActorRestrained = bool (*)(RE::Actor* a_actor, bool a_restrict);
-    inline REL::Relocation<_SetActorRestrained> SetActorRestrained(REL::ID(316742));
+    inline REL::Relocation<_SetActorRestrained> SetActorRestrained(vrshim::FlatId(316742));
 
     using _AIProcess_getAnimationManager = void (*)(uint64_t aiProcess, StackPtr<BSAnimationManager*>& manager);
-    inline REL::Relocation<_AIProcess_getAnimationManager> AIProcess_getAnimationManager(REL::Offset(0xec5400));
+    inline REL::Relocation<_AIProcess_getAnimationManager> AIProcess_getAnimationManager(vrshim::FlatOffset(0xec5400));
 
     using _BSAnimationManager_setActiveGraph = void (*)(BSAnimationManager* manager, int graph);
-    inline REL::Relocation<_BSAnimationManager_setActiveGraph> BSAnimationManager_setActiveGraph(REL::Offset(0x1690240));
+    inline REL::Relocation<_BSAnimationManager_setActiveGraph> BSAnimationManager_setActiveGraph(vrshim::FlatOffset(0x1690240));
 
-    inline REL::Relocation<uint64_t> EquippedWeaponData_vfunc(REL::Offset(0x2d7fcf8));
+    inline REL::Relocation<uint64_t> EquippedWeaponData_vfunc(vrshim::FlatOffset(0x2d7fcf8));
 
     using _NiNode_UpdateWorldBound = void (*)(RE::NiNode* node);
-    inline REL::Relocation<_NiNode_UpdateWorldBound> NiNode_UpdateWorldBound(REL::Offset(0x1c18ab0));
+    inline REL::Relocation<_NiNode_UpdateWorldBound> NiNode_UpdateWorldBound(vrshim::FlatOffset(0x1c18ab0));
 
     using _AIProcess_Set2DUpdateFlags = void (*)(RE::AIProcess* proc, uint64_t flags);
-    inline REL::Relocation<_AIProcess_Set2DUpdateFlags> AIProcess_Set3DUpdateFlags(REL::Offset(0xec8ce0));
+    inline REL::Relocation<_AIProcess_Set2DUpdateFlags> AIProcess_Set3DUpdateFlags(vrshim::FlatOffset(0xec8ce0));
 
     using _CombatUtilities_IsActorUsingMelee = bool (*)(RE::Actor* a_actor);
-    inline REL::Relocation<_CombatUtilities_IsActorUsingMelee> CombatUtilities_IsActorUsingMelee(REL::Offset(0x1133bb0));
+    inline REL::Relocation<_CombatUtilities_IsActorUsingMelee> CombatUtilities_IsActorUsingMelee(vrshim::FlatOffset(0x1133bb0));
 
     using _CombatUtilities_IsActorUsingMagic = bool (*)(RE::Actor* a_actor);
-    inline REL::Relocation<_CombatUtilities_IsActorUsingMagic> CombatUtilities_IsActorUsingMagic(REL::Offset(0x1133c30));
+    inline REL::Relocation<_CombatUtilities_IsActorUsingMagic> CombatUtilities_IsActorUsingMagic(vrshim::FlatOffset(0x1133c30));
 
     // ProcessLists singleton — raw offset because the bundled ProcessLists::GetSingleton()'s RelocationID
     // (1569706) has no entry in the shipped VR address-library database and cannot resolve on VR.
-    inline REL::Relocation<RE::ProcessLists**> g_processLists(REL::Offset(0x5930968));
+    inline REL::Relocation<RE::ProcessLists**> g_processLists(vrshim::FlatOffset(0x5930968));
 
     // ProcessLists::GetActorsWithinRangeOfPoint(NiPoint3&, float, BSScrapArray<NiPointer<Actor>>&) —
     // enumerates all loaded actors within a radius of a world point. Not exposed by the bundled headers.
     using _ProcessLists_GetActorsWithinRangeOfPoint = void (*)(RE::ProcessLists*, RE::NiPoint3&, float, RE::BSScrapArray<RE::NiPointer<RE::Actor>>&);
-    inline REL::Relocation<_ProcessLists_GetActorsWithinRangeOfPoint> ProcessLists_GetActorsWithinRangeOfPoint(REL::Offset(0xf8e040));
+    inline REL::Relocation<_ProcessLists_GetActorsWithinRangeOfPoint> ProcessLists_GetActorsWithinRangeOfPoint(vrshim::FlatOffset(0xf8e040));
 
     // NOT declared here on purpose: Actor::RequestDetectionLevels (AddressLib 1368522, VR 0x140dfb3a0), the
     // variant that splits detection into visual and sound channels. It returns through a hidden result pointer
@@ -107,17 +107,17 @@ namespace f4cf::f4vr
     // The engine's own lighting refresh owns this field — it is the setter's only other caller — so a value
     // written here is transient. Re-apply per frame, and read it back if you need to know whether it survived.
     using _AIProcess_GetLightLevel = float (*)(RE::AIProcess* a_process);
-    inline REL::Relocation<_AIProcess_GetLightLevel> AIProcess_GetLightLevel(REL::Offset(0xe9a3a0));
+    inline REL::Relocation<_AIProcess_GetLightLevel> AIProcess_GetLightLevel(vrshim::FlatOffset(0xe9a3a0));
 
     using _AIProcess_SetLightLevel = void (*)(RE::AIProcess* a_process, float a_value);
-    inline REL::Relocation<_AIProcess_SetLightLevel> AIProcess_SetLightLevel(REL::Offset(0xe9a3c0));
+    inline REL::Relocation<_AIProcess_SetLightLevel> AIProcess_SetLightLevel(vrshim::FlatOffset(0xe9a3c0));
 
     // Actor::IsInActiveCombat() — in combat AND the combat group has not already ended. Use instead of the
     // Actor::IsInCombat() virtual (vtable 0xFE), which was measured to always return false on the VR runtime;
     // the bundled headers declare that slot arg-less while the VR SDK declares it taking two more arguments.
     // AddressLib 84790 resolves to VR 0x140e50350.
     using _Actor_IsInActiveCombat = bool (*)(RE::Actor* a_actor);
-    inline REL::Relocation<_Actor_IsInActiveCombat> Actor_IsInActiveCombat(REL::ID(84790));
+    inline REL::Relocation<_Actor_IsInActiveCombat> Actor_IsInActiveCombat(vrshim::FlatId(84790));
 
     // AIProcess::EnterCombat(Actor* self, Actor* target, Actor*) — make the actor owning this process enter
     // combat with the target; the trailing actor is passed null. AddressLib 1514649 resolves to VR
@@ -128,7 +128,7 @@ namespace f4cf::f4vr
     // WORKING on VR 1.2.72, each verified against an actor not already fighting the target — the precondition
     // that matters, since every one of them is a no-op on an actor already in combat.
     using _AIProcess_EnterCombat = void (*)(RE::AIProcess* a_process, RE::Actor* a_actor, RE::Actor* a_target, RE::Actor* a_null);
-    inline REL::Relocation<_AIProcess_EnterCombat> AIProcess_EnterCombat(REL::ID(1514649));
+    inline REL::Relocation<_AIProcess_EnterCombat> AIProcess_EnterCombat(vrshim::FlatId(1514649));
 
     // Actor::StartCombat(Actor* target, Actor* commandingActor) — immediate, on the calling thread. The
     // parameter reading is pinned by the Papyrus binding the PDB names
@@ -138,7 +138,7 @@ namespace f4cf::f4vr
     // safer thing to call, but it has no row in the VR address library at all.) AddressLib 765218 resolves to
     // VR 0x140e4fe00 — status 2, the least-verified of the three.
     using _Actor_StartCombat = void (*)(RE::Actor* a_actor, RE::Actor* a_target, RE::Actor* a_commandingActor);
-    inline REL::Relocation<_Actor_StartCombat> Actor_StartCombat(REL::ID(765218));
+    inline REL::Relocation<_Actor_StartCombat> Actor_StartCombat(vrshim::FlatId(765218));
 
     // TaskQueueInterface::QueueActorStartCombat(Actor& combatant, Actor& target, bool commandAlly) — queued
     // rather than immediate, so the engine applies it on its own schedule instead of mid-frame. AddressLib
@@ -147,164 +147,164 @@ namespace f4cf::f4vr
     // global that nobody drains would fail silently, so this is the shakiest chain of the three despite the
     // function itself being well mapped. The trailing bool is `abCommandAlly` per the Papyrus signature above.
     using _TaskQueueInterface_QueueActorStartCombat = void (*)(RE::TaskQueueInterface*, RE::Actor*, RE::Actor*, bool);
-    inline REL::Relocation<_TaskQueueInterface_QueueActorStartCombat> TaskQueueInterface_QueueActorStartCombat(REL::ID(179777));
+    inline REL::Relocation<_TaskQueueInterface_QueueActorStartCombat> TaskQueueInterface_QueueActorStartCombat(vrshim::FlatId(179777));
 
     using _AttackBlockHandler_IsPlayerThrowingWeapon = bool (*)();
-    inline REL::Relocation<_AttackBlockHandler_IsPlayerThrowingWeapon> AttackBlockHandler_IsPlayerThrowingWeapon(REL::Offset(0xfcbcd0));
+    inline REL::Relocation<_AttackBlockHandler_IsPlayerThrowingWeapon> AttackBlockHandler_IsPlayerThrowingWeapon(vrshim::FlatOffset(0xfcbcd0));
 
     using _Actor_CanThrow = bool (*)(RE::Actor* a_actor, uint32_t equipIndex);
-    inline REL::Relocation<_Actor_CanThrow> Actor_CanThrow(REL::Offset(0xe52050));
-    inline REL::Relocation<uint32_t> g_equipIndex(REL::Offset(0x3706d2c));
+    inline REL::Relocation<_Actor_CanThrow> Actor_CanThrow(vrshim::FlatOffset(0xe52050));
+    inline REL::Relocation<uint32_t> g_equipIndex(vrshim::FlatOffset(0x3706d2c));
 
     using _IAnimationGraphManagerHolder_NotifyAnimationGraph = void (*)(RE::IAnimationGraphManagerHolder* a_holder, const RE::BSFixedString& event);
-    inline REL::Relocation<_IAnimationGraphManagerHolder_NotifyAnimationGraph> IAnimationGraphManagerHolder_NotifyAnimationGraph(REL::Offset(0x80e7f0));
+    inline REL::Relocation<_IAnimationGraphManagerHolder_NotifyAnimationGraph> IAnimationGraphManagerHolder_NotifyAnimationGraph(vrshim::FlatOffset(0x80e7f0));
 
     using _TESObjectREFR_UpdateAnimation = void (*)(RE::TESObjectREFR* obj, float a_delta);
-    inline REL::Relocation<_TESObjectREFR_UpdateAnimation> TESObjectREFR_UpdateAnimation(REL::Offset(0x419b50));
+    inline REL::Relocation<_TESObjectREFR_UpdateAnimation> TESObjectREFR_UpdateAnimation(vrshim::FlatOffset(0x419b50));
 
-    inline REL::Relocation<RE::NiNode*> worldRootCamera1(REL::Offset(0x6885c80));
+    inline REL::Relocation<RE::NiNode*> worldRootCamera1(vrshim::FlatOffset(0x6885c80));
 
     // loadNif native func
     //typedef int(*_loadNif)(const char* path, uint64_t parentNode, uint64_t flags);
     using _loadNif = int (*)(uint64_t path, uint64_t mem, uint64_t flags);
-    inline REL::Relocation<_loadNif> loadNif(REL::Offset(0x1d0dee0));
-    //REL::Relocation<_loadNif> loadNif(REL::Offset(0x1d0dd80));
+    inline REL::Relocation<_loadNif> loadNif(vrshim::FlatOffset(0x1d0dee0));
+    //REL::Relocation<_loadNif> loadNif(vrshim::FlatOffset(0x1d0dd80));
 
     using _cloneNode = RE::NiNode* (*)(const RE::NiNode* node, NiCloneProcess* obj);
-    inline REL::Relocation<_cloneNode> cloneNode(REL::Offset(0x1c13ff0));
+    inline REL::Relocation<_cloneNode> cloneNode(vrshim::FlatOffset(0x1c13ff0));
 
     using _addNode = RE::NiNode* (*)(uint64_t attachNode, const RE::NiAVObject* node);
-    inline REL::Relocation<_addNode> addNode(REL::Offset(0xada20));
+    inline REL::Relocation<_addNode> addNode(vrshim::FlatOffset(0xada20));
 
     using _BSFadeNode_UpdateGeomArray = void* (*)(RE::NiNode* node, int somevar);
-    inline REL::Relocation<_BSFadeNode_UpdateGeomArray> BSFadeNode_UpdateGeomArray(REL::Offset(0x27a9690));
+    inline REL::Relocation<_BSFadeNode_UpdateGeomArray> BSFadeNode_UpdateGeomArray(vrshim::FlatOffset(0x27a9690));
 
     using _BSFadeNode_UpdateDownwardPass = void* (*)(RE::NiNode* node, RE::NiUpdateData* updateData, int somevar);
-    inline REL::Relocation<_BSFadeNode_UpdateDownwardPass> BSFadeNode_UpdateDownwardPass(REL::Offset(0x27a8db0));
+    inline REL::Relocation<_BSFadeNode_UpdateDownwardPass> BSFadeNode_UpdateDownwardPass(vrshim::FlatOffset(0x27a8db0));
 
     using _BSFadeNode_MergeWorldBounds = void* (*)(RE::NiNode* node);
-    inline REL::Relocation<_BSFadeNode_MergeWorldBounds> BSFadeNode_MergeWorldBounds(REL::Offset(0x27a9930));
+    inline REL::Relocation<_BSFadeNode_MergeWorldBounds> BSFadeNode_MergeWorldBounds(vrshim::FlatOffset(0x27a9930));
 
     using _NiNode_UpdateTransformsAndBounds = void* (*)(RE::NiNode* node, RE::NiUpdateData* updateData);
-    inline REL::Relocation<_NiNode_UpdateTransformsAndBounds> NiNode_UpdateTransformsAndBounds(REL::Offset(0x1c18ce0));
+    inline REL::Relocation<_NiNode_UpdateTransformsAndBounds> NiNode_UpdateTransformsAndBounds(vrshim::FlatOffset(0x1c18ce0));
 
     using _NiNode_UpdateDownwardPass = void* (*)(RE::NiNode* node, RE::NiUpdateData* updateData, uint64_t unk, int somevar);
-    inline REL::Relocation<_NiNode_UpdateDownwardPass> NiNode_UpdateDownwardPass(REL::Offset(0x1c18620));
+    inline REL::Relocation<_NiNode_UpdateDownwardPass> NiNode_UpdateDownwardPass(vrshim::FlatOffset(0x1c18620));
 
     using _BSGraphics_Utility_CalcBoneMatrices = void* (*)(RE::BSSubIndexTriShape* node, uint64_t counter);
-    inline REL::Relocation<_BSGraphics_Utility_CalcBoneMatrices> BSGraphics_Utility_CalcBoneMatrices(REL::Offset(0x1dabc60));
+    inline REL::Relocation<_BSGraphics_Utility_CalcBoneMatrices> BSGraphics_Utility_CalcBoneMatrices(vrshim::FlatOffset(0x1dabc60));
 
     using _TESObjectCELL_GetLandHeight = uint64_t (*)(RE::TESObjectCELL* cell, const RE::NiPoint3* coord, const float* height);
-    inline REL::Relocation<_TESObjectCELL_GetLandHeight> TESObjectCell_GetLandHeight(REL::Offset(0x039b230));
+    inline REL::Relocation<_TESObjectCELL_GetLandHeight> TESObjectCell_GetLandHeight(vrshim::FlatOffset(0x039b230));
 
     using _Actor_SwitchRace = void (*)(RE::Actor* a_actor, RE::TESRace* a_race, bool param3, bool param4);
-    inline REL::Relocation<_Actor_SwitchRace> Actor_SwitchRace(REL::Offset(0xe07850));
+    inline REL::Relocation<_Actor_SwitchRace> Actor_SwitchRace(vrshim::FlatOffset(0xe07850));
 
     using _Actor_Reset3D = void (*)(RE::Actor* a_actor, double param2, uint64_t param3, bool param4, uint64_t param5);
-    inline REL::Relocation<_Actor_Reset3D> Actor_Reset3D(REL::Offset(0xddad60));
+    inline REL::Relocation<_Actor_Reset3D> Actor_Reset3D(vrshim::FlatOffset(0xddad60));
 
     using _PowerArmor_ActorInPowerArmor = bool (*)(RE::Actor* a_actor);
-    inline REL::Relocation<_PowerArmor_ActorInPowerArmor> PowerArmor_ActorInPowerArmor(REL::Offset(0x9bf5d0));
+    inline REL::Relocation<_PowerArmor_ActorInPowerArmor> PowerArmor_ActorInPowerArmor(vrshim::FlatOffset(0x9bf5d0));
 
     using _PowerArmor_SwitchToPowerArmor = bool (*)(RE::Actor* a_actor, RE::TESObjectREFR* a_refr, uint64_t a_char);
-    inline REL::Relocation<_PowerArmor_SwitchToPowerArmor> PowerArmor_SwitchToPowerArmor(REL::Offset(0x9bfbc0));
+    inline REL::Relocation<_PowerArmor_SwitchToPowerArmor> PowerArmor_SwitchToPowerArmor(vrshim::FlatOffset(0x9bfbc0));
 
     using _AIProcess_Update3DModel = void (*)(RE::AIProcess* proc, RE::Actor* a_actor, uint64_t flags, uint64_t someNum);
-    inline REL::Relocation<_AIProcess_Update3DModel> AIProcess_Update3DModel(REL::Offset(0x0e3c9c0));
+    inline REL::Relocation<_AIProcess_Update3DModel> AIProcess_Update3DModel(vrshim::FlatOffset(0x0e3c9c0));
 
     using _PowerArmor_SwitchFromPowerArmorFurnitureLoaded = void (*)(RE::Actor* a_actor, uint64_t somenum);
-    inline REL::Relocation<_PowerArmor_SwitchFromPowerArmorFurnitureLoaded> PowerArmor_SwitchFromPowerArmorFurnitureLoaded(REL::Offset(0x9c1450));
+    inline REL::Relocation<_PowerArmor_SwitchFromPowerArmorFurnitureLoaded> PowerArmor_SwitchFromPowerArmorFurnitureLoaded(vrshim::FlatOffset(0x9c1450));
 
-    inline REL::Relocation<uint64_t> g_frameCounter(REL::Offset(0x65a2b48));
-    inline REL::Relocation<std::uint64_t*> cloneAddr1(REL::Offset(0x36ff560));
-    inline REL::Relocation<std::uint64_t*> cloneAddr2(REL::Offset(0x36ff564));
+    inline REL::Relocation<uint64_t> g_frameCounter(vrshim::FlatOffset(0x65a2b48));
+    inline REL::Relocation<std::uint64_t*> cloneAddr1(vrshim::FlatOffset(0x36ff560));
+    inline REL::Relocation<std::uint64_t*> cloneAddr2(vrshim::FlatOffset(0x36ff564));
 
     using _TESObjectREFR_GetWorldSpace = RE::TESWorldSpace* (*)(RE::TESObjectREFR* a_refr);
-    inline REL::Relocation<_TESObjectREFR_GetWorldSpace> TESObjectREFR_GetWorldSpace(REL::Offset(0x3f75a0));
+    inline REL::Relocation<_TESObjectREFR_GetWorldSpace> TESObjectREFR_GetWorldSpace(vrshim::FlatOffset(0x3f75a0));
 
     // using _TESDataHandler_CreateReferenceAtLocation = void* (*)(DataHandler* dataHandler, void* newRefr, f4vr::NEW_REFR_DATA* refrData);
-    // inline REL::Relocation<_TESDataHandler_CreateReferenceAtLocation> TESDataHandler_CreateReferenceAtLocation(REL::Offset(0x11bd80));
+    // inline REL::Relocation<_TESDataHandler_CreateReferenceAtLocation> TESDataHandler_CreateReferenceAtLocation(vrshim::FlatOffset(0x11bd80));
 
     using _Actor_GetCurrentWeapon = RE::TESObjectWEAP* (*)(RE::Actor* a_actor, RE::TESObjectWEAP* weap, RE::BGSEquipIndex idx);
-    inline REL::Relocation<_Actor_GetCurrentWeapon> Actor_GetCurrentWeapon(REL::Offset(0xe50da0));
+    inline REL::Relocation<_Actor_GetCurrentWeapon> Actor_GetCurrentWeapon(vrshim::FlatOffset(0xe50da0));
 
     using _Actor_GetCurrentAmmo = RE::TESAmmo* (*)(RE::Actor* a_actor, RE::BGSEquipIndex idx);
-    inline REL::Relocation<_Actor_GetCurrentAmmo> Actor_GetCurrentAmmo(REL::Offset(0xe05ba0));
+    inline REL::Relocation<_Actor_GetCurrentAmmo> Actor_GetCurrentAmmo(vrshim::FlatOffset(0xe05ba0));
 
     using _Actor_GetWeaponEquipIndex = void (*)(RE::Actor* a_actor, RE::BGSEquipIndex* idx, BGSObjectInstance* instance);
-    inline REL::Relocation<_Actor_GetWeaponEquipIndex> Actor_GetWeaponEquipIndex(REL::Offset(0xe50e70));
+    inline REL::Relocation<_Actor_GetWeaponEquipIndex> Actor_GetWeaponEquipIndex(vrshim::FlatOffset(0xe50e70));
 
     using _TESObjectREFR_Set3D = void (*)(RE::TESObjectREFR* a_refr, RE::NiAVObject* a_obj, bool unk);
-    inline REL::Relocation<_TESObjectREFR_Set3D> TESObjectREFR_Set3D(REL::Offset(0x3ece40));
+    inline REL::Relocation<_TESObjectREFR_Set3D> TESObjectREFR_Set3D(vrshim::FlatOffset(0x3ece40));
 
     using _TESObjectREFR_Set3DSimple = void (*)(RE::TESObjectREFR* a_refr, RE::NiAVObject* a_obj, bool unk);
-    inline REL::Relocation<_TESObjectREFR_Set3DSimple> TESObjectREFR_Set3DSimple(REL::Offset(0x3edb20));
+    inline REL::Relocation<_TESObjectREFR_Set3DSimple> TESObjectREFR_Set3DSimple(vrshim::FlatOffset(0x3edb20));
 
     using _TESObjectREFR_DropAddon3DReplacement = void (*)(RE::TESObjectREFR* a_refr, RE::NiAVObject* a_obj);
-    inline REL::Relocation<_TESObjectREFR_DropAddon3DReplacement> TESObjectREFR_DropAddon3DReplacement(REL::Offset(0x3e9c70));
+    inline REL::Relocation<_TESObjectREFR_DropAddon3DReplacement> TESObjectREFR_DropAddon3DReplacement(vrshim::FlatOffset(0x3e9c70));
 
     using _BSPointerHandleManagerInterface_GetSmartPointer = void (*)(void* a_handle, void* a_refr);
-    inline REL::Relocation<_BSPointerHandleManagerInterface_GetSmartPointer> BSPointerHandleManagerInterface_GetSmartPointer(REL::Offset(0xab60));
+    inline REL::Relocation<_BSPointerHandleManagerInterface_GetSmartPointer> BSPointerHandleManagerInterface_GetSmartPointer(vrshim::FlatOffset(0xab60));
 
     using _TESObjectCell_AttachReference3D = void (*)(RE::TESObjectCELL* a_cell, RE::TESObjectREFR* a_refr, bool somebool, bool somebool2);
-    inline REL::Relocation<_TESObjectCell_AttachReference3D> TESObjectCell_AttachReference3D(REL::Offset(0x3c8310));
+    inline REL::Relocation<_TESObjectCell_AttachReference3D> TESObjectCell_AttachReference3D(vrshim::FlatOffset(0x3c8310));
 
     using _TESObjectREFR_AttachToParentRef3D = void (*)(RE::TESObjectREFR* a_refr);
-    inline REL::Relocation<_TESObjectREFR_AttachToParentRef3D> TESObjectREFR_AttachToParentRef3D(REL::Offset(0x46b380));
+    inline REL::Relocation<_TESObjectREFR_AttachToParentRef3D> TESObjectREFR_AttachToParentRef3D(vrshim::FlatOffset(0x46b380));
 
     using _TESObjectREFR_AttachAllChildRef3D = void (*)(RE::TESObjectREFR* a_refr);
-    inline REL::Relocation<_TESObjectREFR_AttachAllChildRef3D> TESObjectREFR_AttachAllChildRef3D(REL::Offset(0x46b8d0));
+    inline REL::Relocation<_TESObjectREFR_AttachAllChildRef3D> TESObjectREFR_AttachAllChildRef3D(vrshim::FlatOffset(0x46b8d0));
 
     using _TESObjectREFR_InitHavokForCollisionObject = void (*)(RE::TESObjectREFR* a_refr);
-    inline REL::Relocation<_TESObjectREFR_InitHavokForCollisionObject> TESObjectREFR_InitHavokForCollisionObject(REL::Offset(0x3eee60));
+    inline REL::Relocation<_TESObjectREFR_InitHavokForCollisionObject> TESObjectREFR_InitHavokForCollisionObject(vrshim::FlatOffset(0x3eee60));
 
     using _bhkUtilFunctions_MoveFirstCollisionObjectToRoot = void (*)(RE::NiAVObject* root, RE::NiAVObject* child);
-    inline REL::Relocation<_bhkUtilFunctions_MoveFirstCollisionObjectToRoot> bhkUtilFunctions_MoveFirstCollisionObjectToRoot(REL::Offset(0x1e17050));
+    inline REL::Relocation<_bhkUtilFunctions_MoveFirstCollisionObjectToRoot> bhkUtilFunctions_MoveFirstCollisionObjectToRoot(vrshim::FlatOffset(0x1e17050));
 
     using _bhkUtilFunctions_SetLayer = void (*)(RE::NiAVObject* root, std::uint32_t collisionLayer);
-    inline REL::Relocation<_bhkUtilFunctions_SetLayer> bhkUtilFunctions_SetLayer(REL::Offset(0x1e16180));
+    inline REL::Relocation<_bhkUtilFunctions_SetLayer> bhkUtilFunctions_SetLayer(vrshim::FlatOffset(0x1e16180));
 
     using _bhkWorld_RemoveObject = void (*)(RE::NiAVObject* root, bool a_bool, bool a_bool2);
-    inline REL::Relocation<_bhkWorld_RemoveObject> bhkWorld_RemoveObject(REL::Offset(0x1df9480));
+    inline REL::Relocation<_bhkWorld_RemoveObject> bhkWorld_RemoveObject(vrshim::FlatOffset(0x1df9480));
 
     using _bhkWorld_SetMotion = void (*)(RE::NiAVObject* root, RE::hknpMotionPropertiesId::Preset preset, bool bool1, bool bool2, bool bool3);
-    inline REL::Relocation<_bhkWorld_SetMotion> bhkWorld_SetMotion(REL::Offset(0x1df95b0));
+    inline REL::Relocation<_bhkWorld_SetMotion> bhkWorld_SetMotion(vrshim::FlatOffset(0x1df95b0));
 
     using _bhkNPCollisionObject_AddToWorld = void (*)(RE::bhkNPCollisionObject* a_obj, RE::bhkWorld* a_world);
-    inline REL::Relocation<_bhkNPCollisionObject_AddToWorld> bhkNPCollisionObject_AddToWorld(REL::Offset(0x1e07be0));
+    inline REL::Relocation<_bhkNPCollisionObject_AddToWorld> bhkNPCollisionObject_AddToWorld(vrshim::FlatOffset(0x1e07be0));
 
     using _TESObjectCell_GetbhkWorld = RE::bhkWorld* (*)(RE::TESObjectCELL* a_cell);
-    inline REL::Relocation<_TESObjectCell_GetbhkWorld> TESObjectCell_GetbhkWorld(REL::Offset(0x39b070));
+    inline REL::Relocation<_TESObjectCell_GetbhkWorld> TESObjectCell_GetbhkWorld(vrshim::FlatOffset(0x39b070));
 
     using _Actor_GetAmmoClipPercentage = float (*)(RE::Actor* a_actor, RE::BGSEquipIndex a_idx);
-    inline REL::Relocation<_Actor_GetAmmoClipPercentage> Actor_GetAmmoClipPercentage(REL::Offset(0xddf6c0));
+    inline REL::Relocation<_Actor_GetAmmoClipPercentage> Actor_GetAmmoClipPercentage(vrshim::FlatOffset(0xddf6c0));
 
     using _Actor_GetCurrentAmmoCount = float (*)(RE::Actor* a_actor, RE::BGSEquipIndex a_idx);
-    inline REL::Relocation<_Actor_GetCurrentAmmoCount> Actor_GetCurrentAmmoCount(REL::Offset(0xddf690));
+    inline REL::Relocation<_Actor_GetCurrentAmmoCount> Actor_GetCurrentAmmoCount(vrshim::FlatOffset(0xddf690));
 
     using _Actor_SetCurrentAmmoCount = float (*)(RE::Actor* a_actor, RE::BGSEquipIndex a_idx, int a_count);
-    inline REL::Relocation<_Actor_SetCurrentAmmoCount> Actor_SetCurrentAmmoCount(REL::Offset(0xddf790));
+    inline REL::Relocation<_Actor_SetCurrentAmmoCount> Actor_SetCurrentAmmoCount(vrshim::FlatOffset(0xddf790));
 
     using _ExtraDataList_setAmmoCount = void (*)(RE::ExtraDataList* a_list, int a_count);
-    inline REL::Relocation<_ExtraDataList_setAmmoCount> ExtraDataList_setAmmoCount(REL::Offset(0x980d0));
+    inline REL::Relocation<_ExtraDataList_setAmmoCount> ExtraDataList_setAmmoCount(vrshim::FlatOffset(0x980d0));
 
     using _ExtraDataList_setCount = void (*)(RE::ExtraDataList* a_list, int a_count);
-    inline REL::Relocation<_ExtraDataList_setCount> ExtraDataList_setCount(REL::Offset(0x88fe0));
+    inline REL::Relocation<_ExtraDataList_setCount> ExtraDataList_setCount(vrshim::FlatOffset(0x88fe0));
 
     using _ExtraDataListExtraDataList = void (*)(RE::ExtraDataList* a_list);
-    inline REL::Relocation<_ExtraDataListExtraDataList> ExtraDataListExtraDataList(REL::Offset(0x81360));
+    inline REL::Relocation<_ExtraDataListExtraDataList> ExtraDataListExtraDataList(vrshim::FlatOffset(0x81360));
 
     using _ExtraDataListSetPersistentCell = void (*)(RE::ExtraDataList* a_list, int a_int);
-    inline REL::Relocation<_ExtraDataListSetPersistentCell> ExtraDataListSetPersistentCell(REL::Offset(0x87bc0));
+    inline REL::Relocation<_ExtraDataListSetPersistentCell> ExtraDataListSetPersistentCell(vrshim::FlatOffset(0x87bc0));
 
     // using _MemoryManager_Allocate = void* (*)(Heap* manager, uint64_t size, uint32_t someint, bool somebool);
-    // inline REL::Relocation<_MemoryManager_Allocate> MemoryManager_Allocate(REL::Offset(0x1b91950));
+    // inline REL::Relocation<_MemoryManager_Allocate> MemoryManager_Allocate(vrshim::FlatOffset(0x1b91950));
 
     using _togglePipboyLight = void* (*)(RE::Actor* a_actor);
-    inline REL::Relocation<_togglePipboyLight> togglePipboyLight(REL::Offset(0xf27720));
+    inline REL::Relocation<_togglePipboyLight> togglePipboyLight(vrshim::FlatOffset(0xf27720));
 
     using _isPipboyLightOn = bool* (*)(RE::Actor* a_actor);
-    inline REL::Relocation<_isPipboyLightOn> isPipboyLightOn(REL::Offset(0xf27790));
+    inline REL::Relocation<_isPipboyLightOn> isPipboyLightOn(vrshim::FlatOffset(0xf27790));
 
     // PlayerCharacter::ShowPipboyLight(bool show, bool skipGlowEffects) — AddressLib 1304102, VR 0x140f277b0. The
     // worker behind togglePipboyLight, which adds the UIPipBoyLightOn/Off menu sound and the controller light-bar state
@@ -312,14 +312,14 @@ namespace f4cf::f4vr
     // (TESObjectLIGH::GenDynamic) into PlayerCharacter::niPipboyLight / pipboyLight, hiding removes them
     // (ShadowSceneNode::RemoveLight). a_skipGlowEffects leaves the glow meshes of the wrist / headlamp light as they are.
     using _PlayerCharacter_ShowPipboyLight = void (*)(RE::PlayerCharacter* a_player, bool a_show, bool a_skipGlowEffects);
-    inline REL::Relocation<_PlayerCharacter_ShowPipboyLight> PlayerCharacter_ShowPipboyLight(REL::Offset(0xf277b0));
+    inline REL::Relocation<_PlayerCharacter_ShowPipboyLight> PlayerCharacter_ShowPipboyLight(vrshim::FlatOffset(0xf277b0));
 
     // The `call PlayerCharacter::IsPipboyLightOn` in PipboyManager::InitPipboy (VR 0x140c34780), which runs as the
     // Pip-Boy opens: bytes E8 DA 2C 2F 00. InitPipboy saves the result as PipboyManager::wasPipboyLightActive (VR +0x1F5,
     // flat +0x1E5) and, when it's set, hides the light with ShowPipboyLight(false, true); closing the
     // Pip-Boy (VR 0x140c337a0) shows it again when the flag is set. In power armor InitPipboy stores false without
     // making the call, which is why the light stays on there: an `xor eax, eax` in its place does the same outside.
-    inline REL::Relocation<std::uintptr_t> PipboyManager_InitPipboy_IsPipboyLightOnCall(REL::Offset(0xc34ab1));
+    inline REL::Relocation<std::uintptr_t> PipboyManager_InitPipboy_IsPipboyLightOnCall(vrshim::FlatOffset(0xc34ab1));
 
     // BSLight::SetShape — VR 0x14286f9b0, no address-library name (named here for what it does). Sets the light type
     // (BSLight +0x180; 6 = spot) and the light-volume geometry the deferred renderer draws the light with
@@ -330,18 +330,18 @@ namespace f4cf::f4vr
     // a_height = radius, and 1, 1, 1 (read by the area-light type only). Returns early when the type is unchanged, so
     // rebuilding the cone of a live light means clearing +0x180 first.
     using _BSLight_SetShape = void (*)(RE::BSLight* a_light, std::int32_t a_type, float a_width, float a_baseRadius, float a_height, float a_x, float a_y, float a_z);
-    inline REL::Relocation<_BSLight_SetShape> BSLight_SetShape(REL::Offset(0x286f9b0));
+    inline REL::Relocation<_BSLight_SetShape> BSLight_SetShape(vrshim::FlatOffset(0x286f9b0));
 
     // BSLight::SetCameraFrustum — VR 0x14286f180, no address-library name (named here for what it does). Applies a
     // perspective frustum to the camera (NiCamera::SetViewFrustum): ±tan of the half FOVs (radians, each clamped to
     // [1°, 160°]), a_near, and the light's NiLight radius as far (a_far only while the light has no NiLight). Sets up
     // a BSShadowFrustumLight's shadow camera, and the gobo projection camera of a light without shadows.
     using _BSLight_SetCameraFrustum = void (*)(RE::BSLight* a_light, float a_fovX, float a_fovY, RE::NiCamera* a_camera, float a_near, float a_far);
-    inline REL::Relocation<_BSLight_SetCameraFrustum> BSLight_SetCameraFrustum(REL::Offset(0x286f180));
+    inline REL::Relocation<_BSLight_SetCameraFrustum> BSLight_SetCameraFrustum(vrshim::FlatOffset(0x286f180));
 
     // vtables of the classes a TESObjectLIGH spot light is built as: BSLight without shadows, BSShadowFrustumLight with.
-    inline REL::Relocation<std::uintptr_t> BSLight_vtbl(REL::Offset(0x30b8a40));
-    inline REL::Relocation<std::uintptr_t> BSShadowFrustumLight_vtbl(REL::Offset(0x30beed8));
+    inline REL::Relocation<std::uintptr_t> BSLight_vtbl(vrshim::FlatOffset(0x30b8a40));
+    inline REL::Relocation<std::uintptr_t> BSShadowFrustumLight_vtbl(vrshim::FlatOffset(0x30beed8));
 
     // VR player turning. The game turns the player by rotating the VR world (room) transform rather than the
     // actor: the actor's heading follows the HMD. The three entries below are the get/set pair the engine's own
@@ -350,7 +350,7 @@ namespace f4cf::f4vr
 
     // The VR world-space data the game rotates when the player turns; other VR mods call it `vrDataStruct`. The
     // room rotation sits at +0x210 as a SIMD-padded 3x3 matrix (three rows of four floats).
-    inline REL::Relocation<void**> g_vrWorldData(REL::Offset(0x59429c0));
+    inline REL::Relocation<void**> g_vrWorldData(vrshim::FlatOffset(0x59429c0));
     inline constexpr std::ptrdiff_t VR_WORLD_DATA_ROTATION_OFFSET = 0x210;
 
     // Euler decomposition of the VR world rotation matrix (pass g_vrWorldData + 0x210): the yaw the game turns
@@ -361,12 +361,12 @@ namespace f4cf::f4vr
     // get -> add -> set round trip is sign-convention safe. (A second decomposition exists at 0x141c0fed0, used
     // by the snap path, with a different Euler convention.)
     using _VRWorld_GetEulerAngles = bool (*)(const void* a_rotationMatrix, float* a_outYaw, float* a_outB, float* a_outC);
-    inline REL::Relocation<_VRWorld_GetEulerAngles> VRWorld_GetEulerAngles(REL::Offset(0x1c11b00));
+    inline REL::Relocation<_VRWorld_GetEulerAngles> VRWorld_GetEulerAngles(vrshim::FlatOffset(0x1c11b00));
 
     // Rebuild the VR world rotation from a single yaw (radians, taken by pointer) and write it back — what both
     // the engine's smooth turn and its instant snap call to actually move the player. VR 0x141ba7780.
     using _VRWorld_SetYaw = void (*)(void* a_vrWorldData, const float* a_yawRadians);
-    inline REL::Relocation<_VRWorld_SetYaw> VRWorld_SetYaw(REL::Offset(0x1ba7780));
+    inline REL::Relocation<_VRWorld_SetYaw> VRWorld_SetYaw(vrshim::FlatOffset(0x1ba7780));
 
     // NOT declared here on purpose: the engine's own snap entry points, PlayerCharacter "start smoothed snap"
     // (VR 0x140efa920) and "snap now, with the comfort fade" (VR 0x140efa980). Both only park a target angle in
@@ -389,7 +389,7 @@ namespace f4cf::f4vr
     // wherever a mod wants it, and the engine builds it there itself on the next frame; the clamp still
     // applies, so reaching further than it allows means raising that setting while it matters.
     using _PlayerCharacter_UpdateVRUI = void (*)(RE::PlayerCharacter* a_player, float a_deltaSeconds, bool a_unk);
-    inline REL::Relocation<_PlayerCharacter_UpdateVRUI> PlayerCharacter_UpdateVRUI(REL::Offset(0xef7180));
+    inline REL::Relocation<_PlayerCharacter_UpdateVRUI> PlayerCharacter_UpdateVRUI(vrshim::FlatOffset(0xef7180));
 
     // Fields of PlayerCharacter the function above owns. The two yaws are radians measured clockwise from +Y,
     // the same convention the player's own angleZ is in - measured equal to it to three decimals in game, give
@@ -411,112 +411,112 @@ namespace f4cf::f4vr
     // three times a second on a worker thread. Where a menu ends up is decided by the roots above.
 
     using _isPlayerRadioEnabled = uint64_t (*)();
-    inline REL::Relocation<_isPlayerRadioEnabled> isPlayerRadioEnabled(REL::Offset(0xd0a9d0));
+    inline REL::Relocation<_isPlayerRadioEnabled> isPlayerRadioEnabled(vrshim::FlatOffset(0xd0a9d0));
 
     using _getPlayerRadioFreq = float (*)();
-    inline REL::Relocation<_getPlayerRadioFreq> getPlayerRadioFreq(REL::Offset(0xd0a740));
+    inline REL::Relocation<_getPlayerRadioFreq> getPlayerRadioFreq(vrshim::FlatOffset(0xd0a740));
 
     using _ClearAllKeywords = void (*)(RE::TESForm* form);
-    inline REL::Relocation<_ClearAllKeywords> ClearAllKeywords(REL::Offset(0x148270));
+    inline REL::Relocation<_ClearAllKeywords> ClearAllKeywords(vrshim::FlatOffset(0x148270));
 
     using _AddKeyword = void (*)(RE::TESForm* form, RE::BGSKeyword* keyword);
-    inline REL::Relocation<_AddKeyword> AddKeyword(REL::Offset(0x148310));
+    inline REL::Relocation<_AddKeyword> AddKeyword(vrshim::FlatOffset(0x148310));
 
     // using _ControlMap_SaveRemappings = void(*)(InputManager* a_mgr);
-    // inline REL::Relocation<_ControlMap_SaveRemappings> ControlMap_SaveRemappings(REL::Offset(0x1bb3f00));
+    // inline REL::Relocation<_ControlMap_SaveRemappings> ControlMap_SaveRemappings(vrshim::FlatOffset(0x1bb3f00));
 
     using _ForceGamePause = void (*)(RE::MenuControls* a_mgr);
-    inline REL::Relocation<_ForceGamePause> ForceGamePause(REL::Offset(0x1323370));
+    inline REL::Relocation<_ForceGamePause> ForceGamePause(vrshim::FlatOffset(0x1323370));
 
     using _AIProcess_ClearMuzzleFlashes = void* (*)(RE::AIProcess* middleProcess);
-    inline REL::Relocation<_AIProcess_ClearMuzzleFlashes> AIProcess_ClearMuzzleFlashes(REL::Offset(0xecc710));
+    inline REL::Relocation<_AIProcess_ClearMuzzleFlashes> AIProcess_ClearMuzzleFlashes(vrshim::FlatOffset(0xecc710));
 
     using _AIProcess_CreateMuzzleFlash = void* (*)(RE::AIProcess* middleProcess, uint64_t projectile, RE::Actor* actor);
-    inline REL::Relocation<_AIProcess_CreateMuzzleFlash> AIProcess_CreateMuzzleFlash(REL::Offset(0xecc570));
+    inline REL::Relocation<_AIProcess_CreateMuzzleFlash> AIProcess_CreateMuzzleFlash(vrshim::FlatOffset(0xecc570));
 
     // using _SettingCollectionList_GetPtr = RE::Setting * (*)(SettingCollectionList* list, const char* name);
-    // inline REL::Relocation<_SettingCollectionList_GetPtr> SettingCollectionList_GetPtr(REL::Offset(0x501500));
+    // inline REL::Relocation<_SettingCollectionList_GetPtr> SettingCollectionList_GetPtr(vrshim::FlatOffset(0x501500));
 
     using _BSFlattenedBoneTree_GetBoneIndex = int (*)(RE::NiAVObject* a_tree, RE::BSFixedString* a_name);
-    inline REL::Relocation<_BSFlattenedBoneTree_GetBoneIndex> BSFlattenedBoneTree_GetBoneIndex(REL::Offset(0x1c20c80));
+    inline REL::Relocation<_BSFlattenedBoneTree_GetBoneIndex> BSFlattenedBoneTree_GetBoneIndex(vrshim::FlatOffset(0x1c20c80));
 
     using _BSFlattenedBoneTree_GetBoneNode = RE::NiNode* (*)(RE::NiAVObject* a_tree, RE::BSFixedString* a_name);
-    inline REL::Relocation<_BSFlattenedBoneTree_GetBoneNode> BSFlattenedBoneTree_GetBoneNode(REL::Offset(0x1c21070));
+    inline REL::Relocation<_BSFlattenedBoneTree_GetBoneNode> BSFlattenedBoneTree_GetBoneNode(vrshim::FlatOffset(0x1c21070));
 
     using _BSFlattenedBoneTree_GetBoneNodeFromPos = RE::NiNode* (*)(RE::NiAVObject* a_tree, int a_pos);
-    inline REL::Relocation<_BSFlattenedBoneTree_GetBoneNodeFromPos> BSFlattenedBoneTree_GetBoneNodeFromPos(REL::Offset(0x1c21030));
+    inline REL::Relocation<_BSFlattenedBoneTree_GetBoneNodeFromPos> BSFlattenedBoneTree_GetBoneNodeFromPos(vrshim::FlatOffset(0x1c21030));
 
     using _BSFlattenedBoneTree_UpdateBoneArray = void* (*)(RE::NiAVObject* node);
-    inline REL::Relocation<_BSFlattenedBoneTree_UpdateBoneArray> BSFlattenedBoneTree_UpdateBoneArray(REL::Offset(0x1c214b0));
+    inline REL::Relocation<_BSFlattenedBoneTree_UpdateBoneArray> BSFlattenedBoneTree_UpdateBoneArray(vrshim::FlatOffset(0x1c214b0));
 
     // Native function that takes the 1st person skeleton weapon node and calculates the skeleton from upper-arm down based off the offsetNode
     using _Update1StPersonArm = void* (*)(const RE::PlayerCharacter* pc, RE::NiNode** weapon, RE::NiNode** offsetNode);
-    inline REL::Relocation<_Update1StPersonArm> Update1StPersonArm(REL::Offset(0xef6280));
+    inline REL::Relocation<_Update1StPersonArm> Update1StPersonArm(vrshim::FlatOffset(0xef6280));
 
     // Taken from FRIK hooks
-    //REL::Relocation<uintptr_t> hookBeforeRenderer(REL::Offset(0xd844bc));   // this hook didn't work as only a few nodes get moved
-    inline REL::Relocation hookBeforeRenderer(REL::Offset(0x1C21156));
-    // This hook is in member function REL::Offset(0x33) for BSFlattenedBoneTree right before it updates it's own data buffer of all the skeleton world transforms.   I think that buffer is what actually gets rendered
+    //REL::Relocation<uintptr_t> hookBeforeRenderer(vrshim::FlatOffset(0xd844bc));   // this hook didn't work as only a few nodes get moved
+    inline REL::Relocation hookBeforeRenderer(vrshim::FlatOffset(0x1C21156));
+    // This hook is in member function vrshim::FlatOffset(0x33) for BSFlattenedBoneTree right before it updates it's own data buffer of all the skeleton world transforms.   I think that buffer is what actually gets rendered
 
-    inline REL::Relocation hookAnimationVFunc(REL::Offset(0xf2f0a8)); // This is PostUpdateAnimationGraphManager virtual function that updates the player skeleton below the hmd.
+    inline REL::Relocation hookAnimationVFunc(vrshim::FlatOffset(0xf2f0a8)); // This is PostUpdateAnimationGraphManager virtual function that updates the player skeleton below the hmd.
 
-    inline REL::Relocation hookPlayerUpdate(REL::Offset(0xf1004c));
+    inline REL::Relocation hookPlayerUpdate(vrshim::FlatOffset(0xf1004c));
 
-    inline REL::Relocation hookBoneTreeUpdate(REL::Offset(0xd84ee4));
+    inline REL::Relocation hookBoneTreeUpdate(vrshim::FlatOffset(0xd84ee4));
 
-    inline REL::Relocation hookEndUpdate(REL::Offset(0xd84f2c));
-    inline REL::Relocation hookMainDrawCandidate(REL::Offset(0xd844bc));
-    inline REL::Relocation hookMainDrawandUi(REL::Offset(0xd87ace));
+    inline REL::Relocation hookEndUpdate(vrshim::FlatOffset(0xd84f2c));
+    inline REL::Relocation hookMainDrawCandidate(vrshim::FlatOffset(0xd844bc));
+    inline REL::Relocation hookMainDrawandUi(vrshim::FlatOffset(0xd87ace));
 
     using _hookedFunc = void (*)(uint64_t param1, uint64_t param2, uint64_t param3);
-    inline REL::Relocation<_hookedFunc> hookedFunc(REL::Offset(0x1C18620));
+    inline REL::Relocation<_hookedFunc> hookedFunc(vrshim::FlatOffset(0x1C18620));
 
     using _hookedPosPlayerFunc = void (*)(double param1, double param2, double param3);
-    inline REL::Relocation<_hookedPosPlayerFunc> hookedPosPlayerFunc(REL::Offset(0x2841530));
+    inline REL::Relocation<_hookedPosPlayerFunc> hookedPosPlayerFunc(vrshim::FlatOffset(0x2841530));
 
     using _hookedMainDrawCandidateFunc = void (*)(uint64_t param1, uint64_t param2, uint64_t param3, uint64_t param4);
-    inline REL::Relocation<_hookedMainDrawCandidateFunc> hookedMainDrawCandidateFunc(REL::Offset(0xd831f0));
+    inline REL::Relocation<_hookedMainDrawCandidateFunc> hookedMainDrawCandidateFunc(vrshim::FlatOffset(0xd831f0));
 
     using _hookedf10ed0 = void (*)(uint64_t pc);
-    inline REL::Relocation<_hookedf10ed0> hookedf10ed0(REL::Offset(0xf10ed0));
+    inline REL::Relocation<_hookedf10ed0> hookedf10ed0(vrshim::FlatOffset(0xf10ed0));
 
     using _hookedda09a0 = void (*)(uint64_t parm);
-    inline REL::Relocation<_hookedda09a0> hookedda09a0(REL::Offset(0xda09a0));
+    inline REL::Relocation<_hookedda09a0> hookedda09a0(vrshim::FlatOffset(0xda09a0));
 
     using _hooked1c22fb0 = void (*)(uint64_t a, uint64_t b);
-    inline REL::Relocation<_hooked1c22fb0> hooked1c22fb0(REL::Offset(0x1c22fb0));
+    inline REL::Relocation<_hooked1c22fb0> hooked1c22fb0(vrshim::FlatOffset(0x1c22fb0));
 
     using _main_update_player = void (*)(uint64_t rcx, uint64_t rdx);
-    inline REL::Relocation<_main_update_player> main_update_player(REL::Offset(0x1c22fb0));
-    inline REL::Relocation hook_MainUpdatePlayer(REL::Offset(0x0f0ff6a));
+    inline REL::Relocation<_main_update_player> main_update_player(vrshim::FlatOffset(0x1c22fb0));
+    inline REL::Relocation hook_MainUpdatePlayer(vrshim::FlatOffset(0x0f0ff6a));
 
     using _hookMultiBoundCullingFunc = void (*)();
-    inline REL::Relocation<_hookMultiBoundCullingFunc> hookMultiBoundCullingFunc(REL::Offset(0x0d84930));
-    inline REL::Relocation hookMultiBoundCulling(REL::Offset(0x0d8445d));
+    inline REL::Relocation<_hookMultiBoundCullingFunc> hookMultiBoundCullingFunc(vrshim::FlatOffset(0x0d84930));
+    inline REL::Relocation hookMultiBoundCulling(vrshim::FlatOffset(0x0d8445d));
 
     using _smoothMovementHook = void (*)(uint64_t rcx);
-    inline REL::Relocation<_smoothMovementHook> smoothMovementHook(REL::Offset(0x1ba7ba0));
-    inline REL::Relocation hook_smoothMovementHook(REL::Offset(0xd83ec4));
+    inline REL::Relocation<_smoothMovementHook> smoothMovementHook(vrshim::FlatOffset(0x1ba7ba0));
+    inline REL::Relocation hook_smoothMovementHook(vrshim::FlatOffset(0xd83ec4));
 
     using _someRandomFunc = void (*)(uint64_t rcx);
-    inline REL::Relocation<_someRandomFunc> someRandomFunc(REL::Offset(0xd3c820));
-    inline REL::Relocation hookSomeRandomFunc(REL::Offset(0xd8405e));
+    inline REL::Relocation<_someRandomFunc> someRandomFunc(vrshim::FlatOffset(0xd3c820));
+    inline REL::Relocation hookSomeRandomFunc(vrshim::FlatOffset(0xd8405e));
 
     using _Actor_ReEquipAll = void (*)(RE::Actor* a_actor);
-    inline REL::Relocation<_Actor_ReEquipAll> Actor_ReEquipAll(REL::Offset(0xddf050));
-    inline REL::Relocation hookActor_ReEquipAllExit(REL::Offset(0xf01528));
+    inline REL::Relocation<_Actor_ReEquipAll> Actor_ReEquipAll(vrshim::FlatOffset(0xddf050));
+    inline REL::Relocation hookActor_ReEquipAllExit(vrshim::FlatOffset(0xf01528));
 
     using _ExtraData_SetMultiBoundRef = void (*)(std::uint64_t rcx, std::uint64_t rdx);
-    inline REL::Relocation<_ExtraData_SetMultiBoundRef> ExtraData_SetMultiBoundRef(REL::Offset(0x91320));
-    inline REL::Relocation hookExtraData_SetMultiBoundRef(REL::Offset(0xf00dc6));
+    inline REL::Relocation<_ExtraData_SetMultiBoundRef> ExtraData_SetMultiBoundRef(vrshim::FlatOffset(0x91320));
+    inline REL::Relocation hookExtraData_SetMultiBoundRef(vrshim::FlatOffset(0xf00dc6));
 
-    inline REL::Relocation hookActor_GetCurrentWeaponForGunReload(REL::Offset(0xf3027c));
+    inline REL::Relocation hookActor_GetCurrentWeaponForGunReload(vrshim::FlatOffset(0xf3027c));
 
     using _TESObjectREFR_SetupAnimationUpdateDataForRefernce = uint64_t (*)(uint64_t rcx, float* rdx);
-    inline REL::Relocation<_TESObjectREFR_SetupAnimationUpdateDataForRefernce> TESObjectREFR_SetupAnimationUpdateDataForRefernce(REL::Offset(0x4189c0));
-    inline REL::Relocation hookActor_SetupAnimationUpdateDataForRefernce(REL::Offset(0xf0fbdf));
+    inline REL::Relocation<_TESObjectREFR_SetupAnimationUpdateDataForRefernce> TESObjectREFR_SetupAnimationUpdateDataForRefernce(vrshim::FlatOffset(0x4189c0));
+    inline REL::Relocation hookActor_SetupAnimationUpdateDataForRefernce(vrshim::FlatOffset(0xf0fbdf));
 
-    inline REL::Relocation wandMesh(REL::Offset(0x2d686d8));
+    inline REL::Relocation wandMesh(vrshim::FlatOffset(0x2d686d8));
 
     // VR render camera globals block (VR 1.2.72) — holds the per-eye view-projection matrices and the
     // world->VR-origin posAdjust vectors the engine used to render the current frame. Read by the
@@ -524,7 +524,7 @@ namespace f4cf::f4vr
     // (HMD pose already baked in). If overlay geometry reads as garbage after a runtime change this
     // is the first suspect. Source: ROCK DebugBodyOverlay.cpp:1224-1242 (ROCK 0.6) via reference
     // library knowledge-base/debug_draw_overlay.md section 5.3; the sub-offsets are from the same site.
-    inline REL::Relocation<std::uintptr_t*> vrRenderCameraGlobals(REL::Offset(0x6235AC8));
+    inline REL::Relocation<std::uintptr_t*> vrRenderCameraGlobals(vrshim::FlatOffset(0x6235AC8));
     // [vrRenderCameraGlobals + 0x25D0] -> camera data block pointer
     constexpr std::uintptr_t VR_RENDER_CAMERA_DATA_OFFSET = 0x25D0;
     // [cameraData + 0xD0 / + 0x2E0] -> eye 0 / eye 1 column-major 4x4 view-projection matrix
@@ -545,12 +545,12 @@ namespace f4cf::f4vr
     // call with: unk1=1, unk2=0, unk3=0, unk4=0
     // the texture is cashed by the game so this can be used to load textures that are later used by the game by replacing the caching key (path)
     typedef void (*_LoadTextureByPath)(const char* filePath, bool unk1, RE::NiTexture*& texture, int32_t unk2, uint64_t unk3, uint64_t unk4);
-    inline REL::Relocation<_LoadTextureByPath> LoadTextureByPath(REL::Offset(0x027F5520));
+    inline REL::Relocation<_LoadTextureByPath> LoadTextureByPath(vrshim::FlatOffset(0x027F5520));
 
     /**
      * SettingHandlerMap::SettingUpdated (ID 1267051): runs the handlers the game installed on a setting, as the game's
      * settings menu does after it changes one, so the game takes the new value at once.
      */
     using _SettingHandlerMap_SettingUpdated = void (*)(RE::Setting& setting);
-    inline REL::Relocation<_SettingHandlerMap_SettingUpdated> SettingHandlerMap_SettingUpdated(REL::Offset(0x1d11c30));
+    inline REL::Relocation<_SettingHandlerMap_SettingUpdated> SettingHandlerMap_SettingUpdated(vrshim::FlatOffset(0x1d11c30));
 }

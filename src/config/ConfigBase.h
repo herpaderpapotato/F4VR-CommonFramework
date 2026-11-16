@@ -22,7 +22,7 @@
 
 namespace f4cf
 {
-    static const auto BASE_PATH = common::getRelativePathInDocuments(R"(\My Games\Fallout4VR\Mods_Config)");
+    static const auto BASE_PATH = common::getRelativePathInDocuments(R"(\My Games\Fallout4\FRIK-flat\Mods_Config)" /* FRIK-flat: never the FO4VR install folder */);
 
     class ConfigBase : protected config::ConfigReaders, protected config::OffsetsFiles
     {
